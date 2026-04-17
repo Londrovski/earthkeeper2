@@ -1,6 +1,6 @@
-import { configure } from 'quasar/wrappers'
+const { configure } = require('quasar/wrappers')
 
-export default configure(() => {
+module.exports = configure(function () {
   return {
     boot: [],
     
