@@ -1,0 +1,35 @@
+{
+  "name": "earthkeeper2",
+  "version": "2.0.0",
+  "description": "UK Energy Clearing Tracker - Quasar Edition",
+  "author": "James Morris",
+  "private": true,
+  "scripts": {
+    "dev": "quasar dev",
+    "build": "quasar build",
+    "build:pwa": "quasar build -m pwa", 
+    "dev:android": "quasar dev -m capacitor -T android",
+    "dev:ios": "quasar dev -m capacitor -T ios",
+    "build:android": "quasar build -m capacitor -T android",
+    "build:electron": "quasar build -m electron"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.16.4",
+    "quasar": "^2.16.0",
+    "vue": "^3.4.18",
+    "vue-router": "^4.2.5",
+    "maplibre-gl": "^4.7.1",
+    "pinia": "^2.1.7"
+  },
+  "devDependencies": {
+    "@quasar/app-vite": "^1.9.0",
+    "autoprefixer": "^10.4.2",
+    "postcss": "^8.4.14",
+    "vite": "^5.0.0"
+  },
+  "engines": {
+    "node": "^20 || ^18 || ^16",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
+  }
+}
