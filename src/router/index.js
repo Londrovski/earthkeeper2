@@ -1,32 +1,25 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
-  // Simple test route
-  {
-    path: '/',
-    name: 'test',
-    component: () => import('../pages/TestPage.vue')
-  },
-  
-  // Login page (standalone, not inside MainLayout)
+  // Login page first
   {
     path: '/login',
     name: 'login', 
     component: () => import('../pages/LoginPage.vue')
   },
   
-  // Main app (requires authentication)
+  // Simple working home page 
   {
-    path: '/app',
-    name: 'app',
-    component: () => import('../layouts/MainLayout.vue'),
-    children: [
-      { 
-        path: '', 
-        name: 'home',
-        component: () => import('../pages/IndexPage.vue') 
-      }
-    ]
+    path: '/',
+    name: 'home',
+    component: () => import('../pages/IndexPage.vue')
+  },
+
+  // Test page
+  {
+    path: '/test',
+    name: 'test',
+    component: () => import('../pages/TestPage.vue')
   },
 
   // Always leave this as last one
