@@ -1,0 +1,249 @@
+// Earthkeeper Dark Forest Theme
+:root {
+  // Core colors
+  --forest: #0D2416;
+  --forest-m: #122D1C;
+  --gold: #C9A84C;
+  --gold-l: #E8D5A0;
+  --gold-d: #A87C28;
+  --gold-glow: rgba(201,168,76,.18);
+  --ink: #E8D5A0;
+  --ink-d: #F5EDD8;
+  --soft: rgba(232,213,160,.55);
+  --soft-d: rgba(232,213,160,.35);
+  
+  // Place type colors
+  --red: #E07050;
+  --blue: #5B9BD5;
+  --violet: #9B78C8;
+  --teal: #3DBFA8;
+  --amber: #C4722A;
+  --green: #4A9B6F;
+  
+  // Tool colors
+  --omega: #9B5ED4;
+  --jewel: #E07050;
+  --mg: #4A85C9;
+}
+
+// Global styles
+body {
+  font-family: 'Jost', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--forest);
+  color: var(--ink);
+  -webkit-tap-highlight-color: transparent;
+}
+
+// Quasar overrides for dark theme
+.q-dark {
+  color: var(--ink);
+  background: var(--forest);
+}
+
+.q-toolbar {
+  background: var(--forest-m);
+  border-bottom: 1px solid var(--gold-glow);
+}
+
+.q-drawer {
+  background: rgba(18,45,28,.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-right: 1px solid var(--gold-glow);
+}
+
+.q-card {
+  background: var(--forest-m);
+  border: 1px solid var(--gold-glow);
+}
+
+.q-btn--standard {
+  background: var(--gold-d);
+  color: var(--forest);
+  
+  &:hover {
+    background: var(--gold);
+  }
+}
+
+.q-input {
+  .q-field__control {
+    background: rgba(13,36,22,.5);
+    border: 1px solid var(--gold-glow);
+    border-radius: 6px;
+    color: var(--ink);
+  }
+  
+  .q-field__native {
+    color: var(--ink-d);
+    caret-color: var(--gold);
+  }
+  
+  .q-placeholder {
+    color: var(--soft-d);
+  }
+}
+
+.q-tab {
+  color: var(--soft);
+  
+  &.q-tab--active {
+    color: var(--gold);
+  }
+}
+
+.q-chip {
+  background: rgba(201,168,76,.1);
+  color: var(--gold);
+  border: 1.5px solid var(--gold-glow);
+  
+  &.q-chip--selected {
+    background: var(--gold);
+    color: var(--forest);
+  }
+}
+
+// Custom Earthkeeper components
+.ek-map-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  
+  .maplibregl-map {
+    position: absolute;
+    inset: 0;
+  }
+  
+  .maplibregl-ctrl-group {
+    background: rgba(13,36,22,.92) !important;
+    border: 1px solid rgba(201,168,76,.4) !important;
+    border-radius: 6px !important;
+    
+    button {
+      background: transparent !important;
+      border-bottom: 1px solid rgba(201,168,76,.2) !important;
+      
+      &:hover {
+        background: rgba(201,168,76,.15) !important;
+      }
+      
+      &:last-child {
+        border-bottom: none !important;
+      }
+    }
+  }
+  
+  .maplibregl-ctrl-zoom-in .maplibregl-ctrl-icon,
+  .maplibregl-ctrl-zoom-out .maplibregl-ctrl-icon {
+    filter: invert(75%) sepia(60%) saturate(600%) hue-rotate(5deg) brightness(110%) !important;
+  }
+}
+
+.ek-location-chip {
+  padding: 6px 13px;
+  border-radius: 20px;
+  font-size: 13px;
+  border: 1.5px solid;
+  font-family: 'Jost', sans-serif;
+  
+  &.hospital { 
+    border-color: var(--red); 
+    color: var(--red);
+    
+    &.active {
+      background: var(--red);
+      color: #fff;
+    }
+  }
+  
+  &.school { 
+    border-color: var(--blue); 
+    color: var(--blue);
+    
+    &.active {
+      background: var(--blue);
+      color: #fff;
+    }
+  }
+  
+  &.university { 
+    border-color: var(--violet); 
+    color: var(--violet);
+    
+    &.active {
+      background: var(--violet);
+      color: #fff;
+    }
+  }
+  
+  &.hospice { 
+    border-color: var(--teal); 
+    color: var(--teal);
+    
+    &.active {
+      background: var(--teal);
+      color: #fff;
+    }
+  }
+  
+  &.prison { 
+    border-color: var(--amber); 
+    color: var(--amber);
+    
+    &.active {
+      background: var(--amber);
+      color: #fff;
+    }
+  }
+  
+  &.gp { 
+    border-color: var(--green); 
+    color: var(--green);
+    
+    &.active {
+      background: var(--green);
+      color: #fff;
+    }
+  }
+}
+
+.ek-logo {
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--gold);
+  font-weight: 600;
+  letter-spacing: .1em;
+  
+  em {
+    font-style: italic;
+    font-weight: 500;
+  }
+}
+
+.ek-stats {
+  background: rgba(13,36,22,.65);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--gold-glow);
+  border-radius: 8px;
+  padding: 13px 18px;
+}
+
+// Responsive utilities
+@media (max-width: 700px) {
+  .mobile-hidden {
+    display: none !important;
+  }
+  
+  .mobile-visible {
+    display: block !important;
+  }
+}
+
+@media (min-width: 701px) {
+  .desktop-hidden {
+    display: none !important;
+  }
+  
+  .desktop-visible {
+    display: block !important;
+  }
+}
