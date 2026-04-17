@@ -1,35 +1,18 @@
 <template>
-  <q-page class="flex flex-center bg-forest">
-    <!-- Background -->
-    <div class="fixed-full flex flex-center">
-      <q-img 
-        src="/earthkeeper-circular.png" 
-        style="width: 100vmax; height: 100vmax; opacity: 0.07; filter: blur(1px);"
-        class="rounded-full"
-      />
-    </div>
-    
-    <!-- Radial glow -->
-    <div class="fixed-full" style="background: radial-gradient(ellipse at 50% 50%, rgba(201,168,76,0.08) 0%, transparent 65%);"></div>
-
+  <q-page class="flex flex-center" style="background: #0D2416;">
     <!-- Login Card -->
     <q-card 
-      class="login-card relative-position" 
-      style="width: 360px; background: rgba(18,45,28,0.96); border: 1px solid var(--gold-glow);"
+      class="login-card" 
+      style="width: 360px; background: rgba(18,45,28,0.96);"
     >
       <q-card-section class="text-center">
-        <!-- Seal -->
-        <q-avatar size="130px" class="q-mb-md">
-          <img src="/earthkeeper-circular.png" alt="Earthkeeper">
-        </q-avatar>
-
         <!-- Logo -->
-        <div class="ek-logo text-h4 q-mb-xs">
-          Earth<em>keeper</em>
+        <div style="color: #C9A84C; font-size: 28px; font-weight: 600;">
+          Earth<em style="font-style: italic;">keeper</em>
         </div>
         
         <!-- Subtitle -->
-        <div class="text-caption text-soft text-uppercase letter-spacing">
+        <div style="color: rgba(232,213,160,.55); font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; margin-top: 8px;">
           UK Energy Clearing Tracker
         </div>
       </q-card-section>
@@ -73,7 +56,7 @@
           <q-checkbox
             v-model="formData.hasEarthworks"
             label="I have Earthworks tools (EW1–5)"
-            color="gold"
+            color="orange"
             dark
           />
 
@@ -81,8 +64,7 @@
           <q-btn
             type="submit"
             label="Enter"
-            color="gold-d"
-            text-color="forest"
+            color="orange"
             class="full-width"
             size="md"
             :loading="isLoading"
@@ -95,32 +77,42 @@
         <div class="text-negative text-body2">{{ errorMessage }}</div>
       </q-card-section>
 
-      <!-- Instructions link -->
+      <!-- Test buttons -->
       <q-card-section>
-        <q-btn
-          flat
-          label="New here? Read the instructions"
-          color="soft"
-          class="full-width"
-          size="sm"
-          @click="openInstructions"
-        />
+        <div class="q-gutter-sm">
+          <q-btn
+            flat
+            label="Test Login"
+            color="grey"
+            class="full-width"
+            size="sm"
+            @click="testLogin"
+          />
+          <q-btn
+            flat
+            label="Back to Home"
+            color="grey"
+            class="full-width"
+            size="sm"
+            @click="$router.push('/')"
+          />
+        </div>
       </q-card-section>
     </q-card>
   </q-page>
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '../stores/auth-store'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   name: 'LoginPage',
 
   setup () {
     const router = useRouter()
-    const authStore = useAuthStore()
+    const $q = useQuasar()
     
     const isLoading = ref(false)
     const errorMessage = ref('')
@@ -128,7 +120,7 @@ export default defineComponent({
     const formData = ref({
       name: '',
       password: '',
-      tool: 'MG', // Default to Merlin's Grace
+      tool: 'MG',
       hasEarthworks: false
     })
 
@@ -149,17 +141,17 @@ export default defineComponent({
       errorMessage.value = ''
 
       try {
-        const success = await authStore.login(
-          formData.value.name,
-          formData.value.password,
-          formData.value.tool,
-          formData.value.hasEarthworks
-        )
-
-        if (success) {
+        // Simple password test (we'll implement real auth later)
+        await new Promise(resolve => setTimeout(resolve, 1000)) // Fake delay
+        
+        if (formData.value.password === 'test') {
+          $q.notify({
+            message: `Welcome ${formData.value.name}!`,
+            color: 'positive'
+          })
           router.push('/')
         } else {
-          errorMessage.value = 'Incorrect password'
+          errorMessage.value = 'Incorrect password (try "test" for now)'
         }
       } catch (error) {
         errorMessage.value = 'Login failed. Please try again.'
@@ -169,16 +161,14 @@ export default defineComponent({
       }
     }
 
-    const openInstructions = () => {
-      window.open('https://londrovski.github.io/earthkeeper/instructions.html', '_blank')
+    const testLogin = () => {
+      formData.value.name = 'Test User'
+      formData.value.password = 'test'
+      $q.notify({
+        message: 'Form filled with test data',
+        color: 'info'
+      })
     }
-
-    // Check if already authenticated
-    onMounted(() => {
-      if (authStore.checkExistingSession()) {
-        router.push('/')
-      }
-    })
 
     return {
       formData,
@@ -186,7 +176,7 @@ export default defineComponent({
       isLoading,
       errorMessage,
       onSubmit,
-      openInstructions
+      testLogin
     }
   }
 })
@@ -196,17 +186,5 @@ export default defineComponent({
 .login-card {
   box-shadow: 0 8px 64px rgba(0, 0, 0, 0.6);
   border-radius: 10px;
-}
-
-.letter-spacing {
-  letter-spacing: 0.15em;
-}
-
-.bg-forest {
-  background: var(--forest);
-}
-
-.text-soft {
-  color: var(--soft);
 }
 </style>
