@@ -1,16 +1,13 @@
 import { configure } from 'quasar/wrappers'
 
-export default configure(function (/* ctx */) {
+export default configure(function (ctx) {
   return {
     eslint: {
       warnings: true,
       errors: true
     },
 
-    boot: [
-      'maplibre',
-      'github-api'
-    ],
+    boot: [],
 
     css: [
       'app.scss'
@@ -27,13 +24,7 @@ export default configure(function (/* ctx */) {
         node: 'node20'
       },
 
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
-      
-      env: {
-        GITHUB_TOKEN_PART1: 'ghp_KcWJhRHBiDNttiIcY5N',
-        GITHUB_TOKEN_PART2: 'XE23u4hbGqL3coy1n',
-        PASSWORD_HASH: '74e6fbb572af72246abf610d8e268ae53e6599972c571117503dc4537b982b69'
-      }
+      vueRouterMode: 'hash'
     },
 
     devServer: {
@@ -60,9 +51,7 @@ export default configure(function (/* ctx */) {
         'Notify',
         'Dialog',
         'Loading',
-        'LocalStorage',
-        'Platform',
-        'Geolocation'
+        'LocalStorage'
       ]
     },
 
@@ -82,6 +71,10 @@ export default configure(function (/* ctx */) {
       swFilename: 'sw.js',
       manifestFilename: 'manifest.json',
       useCredentialsForManifestTag: false,
+      extendGenerateSWOptions (cfg) {},
+      extendInjectManifestOptions (cfg) {},
+      extendManifestJson (json) {},
+      extendPWACustomSWConf (esbuildConf) {},
       manifest: {
         name: 'Earthkeeper',
         short_name: 'Earthkeeper',
@@ -120,9 +113,7 @@ export default configure(function (/* ctx */) {
       }
     },
 
-    cordova: {
-      // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
-    },
+    cordova: {},
 
     capacitor: {
       hideSplashscreen: true
@@ -131,11 +122,8 @@ export default configure(function (/* ctx */) {
     electron: {
       inspectPort: 5858,
       bundler: 'packager',
-      packager: {
-        // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
-      },
+      packager: {},
       builder: {
-        // https://www.electron.build/configuration/configuration
         appId: 'uk.earthkeeper.app'
       }
     },
