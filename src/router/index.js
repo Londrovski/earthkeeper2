@@ -2,6 +2,14 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import MainLayout from '../layouts/MainLayout.vue'
 
 const routes = [
+  // Login page (standalone, not inside MainLayout)
+  {
+    path: '/login',
+    name: 'login', 
+    component: () => import('../pages/LoginPage.vue')
+  },
+  
+  // Main app (requires authentication)
   {
     path: '/',
     component: MainLayout,
@@ -10,17 +18,11 @@ const routes = [
         path: '', 
         name: 'home',
         component: () => import('../pages/IndexPage.vue') 
-      },
-      {
-        path: '/login',
-        name: 'login', 
-        component: () => import('../pages/LoginPage.vue')
       }
     ]
   },
 
-  // Always leave this as last one,
-  // but you can also remove it
+  // Always leave this as last one
   {
     path: '/:catchAll(.*)*',
     component: () => import('../pages/ErrorNotFound.vue')
