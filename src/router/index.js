@@ -1,7 +1,13 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import MainLayout from '../layouts/MainLayout.vue'
 
 const routes = [
+  // Simple test route
+  {
+    path: '/',
+    name: 'test',
+    component: () => import('../pages/TestPage.vue')
+  },
+  
   // Login page (standalone, not inside MainLayout)
   {
     path: '/login',
@@ -11,8 +17,9 @@ const routes = [
   
   // Main app (requires authentication)
   {
-    path: '/',
-    component: MainLayout,
+    path: '/app',
+    name: 'app',
+    component: () => import('../layouts/MainLayout.vue'),
     children: [
       { 
         path: '', 
