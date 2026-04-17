@@ -58,13 +58,21 @@ export default defineComponent({
       this.message = ''
       
       if (this.password === 'test') {
-        this.message = `Welcome ${this.name}! Login works!`
+        this.message = `Welcome ${this.name}! Redirecting...`
+        
+        // Save login state to localStorage
+        localStorage.setItem('ek2_logged_in', 'true')
+        localStorage.setItem('ek2_user', this.name)
+        
+        // Redirect after a short delay
+        setTimeout(() => {
+          window.location.href = '/'
+        }, 1500)
       } else {
         this.error = 'Try password: test'
       }
     },
     goBack() {
-      // Use window.location instead of router
       window.location.href = '/'
     }
   }
