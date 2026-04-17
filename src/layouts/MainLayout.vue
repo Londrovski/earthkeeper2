@@ -1,5 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
+    <!-- Header -->
     <q-header>
       <q-toolbar class="bg-forest-m text-ink">
         <q-btn
@@ -24,26 +25,26 @@
         <q-space />
 
         <!-- Desktop Stats -->
-        <div class="row items-center q-gutter-lg gt-sm">
+        <div class="row items-center q-gutter-lg gt-sm" v-if="authStore.isAuthenticated">
           <div class="text-center">
-            <div class="text-h6 text-gold">1,234</div>
+            <div class="text-h6 text-gold">{{ locationStore.totalLocations.toLocaleString() }}</div>
             <div class="text-caption text-soft">locations</div>
           </div>
           <div class="text-center">
-            <div class="text-h6 text-gold">456</div>
+            <div class="text-h6 text-gold">{{ locationStore.clearedLocations }}</div>
             <div class="text-caption text-soft">cleared</div>
           </div>
           <div class="text-center">
-            <div class="text-h6 text-gold">37%</div>
+            <div class="text-h6 text-gold">{{ locationStore.progressPercent }}%</div>
             <div class="text-caption text-soft">done</div>
           </div>
         </div>
 
         <!-- User menu -->
-        <div class="q-ml-md">
-          <q-btn-dropdown flat no-caps label="James Morris">
+        <div v-if="authStore.isAuthenticated" class="q-ml-md">
+          <q-btn-dropdown flat no-caps :label="authStore.currentUser">
             <q-list>
-              <q-item clickable v-close-popup>
+              <q-item clickable v-close-popup @click="logout">
                 <q-item-section>
                   <q-item-label>Sign out</q-item-label>
                 </q-item-section>
@@ -61,6 +62,8 @@
       bordered
       class="bg-forest-m"
       :width="280"
+      :mini="!leftDrawerOpen || $q.screen.lt.md"
+      mini-to-overlay
     >
       <q-tabs
         v-model="activeTab"
@@ -76,8 +79,11 @@
 
       <q-separator />
 
+      <!-- Tab content -->
       <div class="q-pa-md">
-        <div class="text-caption text-soft">Tab content coming soon...</div>
+        <LocationsTab v-if="activeTab === 'locations'" />
+        <GroupsTab v-else-if="activeTab === 'groups'" />
+        <LogTab v-else-if="activeTab === 'log'" />
       </div>
     </q-drawer>
 
@@ -87,7 +93,7 @@
     </q-page-container>
 
     <!-- Mobile Bottom Navigation -->
-    <q-footer v-if="$q.screen.lt.md" class="bg-forest-m">
+    <q-footer v-if="$q.screen.lt.md && authStore.isAuthenticated" class="bg-forest-m border-t border-gold-glow">
       <q-tabs
         v-model="activeTab"
         dense
@@ -105,26 +111,59 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth-store'
+import { useLocationStore } from '../stores/location-store'
+import LocationsTab from '../components/LocationsTab.vue'
+import GroupsTab from '../components/GroupsTab.vue'
+import LogTab from '../components/LogTab.vue'
 
 export default defineComponent({
   name: 'MainLayout',
 
+  components: {
+    LocationsTab,
+    GroupsTab,
+    LogTab
+  },
+
   setup () {
+    const router = useRouter()
     const leftDrawerOpen = ref(false)
     const activeTab = ref('locations')
+    const authStore = useAuthStore()
+    const locationStore = useLocationStore()
+
+    const toggleLeftDrawer = () => {
+      leftDrawerOpen.value = !leftDrawerOpen.value
+    }
+
+    const logout = () => {
+      authStore.logout()
+      router.push('/login')
+    }
 
     return {
       leftDrawerOpen,
       activeTab,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
+      authStore,
+      locationStore,
+      toggleLeftDrawer,
+      logout
     }
   }
 })
 </script>
 
 <style lang="scss" scoped>
+.border-t {
+  border-top: 1px solid;
+}
+
+.border-gold-glow {
+  border-color: var(--gold-glow);
+}
+
 .bg-forest-m {
   background: var(--forest-m);
 }
