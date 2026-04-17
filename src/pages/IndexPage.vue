@@ -1,115 +1,61 @@
 <template>
-  <q-page class="flex column no-wrap">
-    <!-- Mobile Stats Bar -->
-    <div v-if="$q.screen.lt.md && authStore.isAuthenticated" 
-         class="bg-forest-m q-pa-sm text-center mobile-visible">
-      <span class="text-gold text-weight-bold">{{ locationStore.totalLocations.toLocaleString() }}</span>
-      <span class="text-soft q-mx-xs"> locations · </span>
-      <span class="text-gold text-weight-bold">{{ locationStore.clearedLocations }}</span>
-      <span class="text-soft q-mx-xs"> cleared · </span>
-      <span class="text-gold text-weight-bold">{{ locationStore.progressPercent }}%</span>
-      <span class="text-soft"> done</span>
-    </div>
+  <q-layout view="lHh Lpr lFf">
+    <!-- Header -->
+    <q-header>
+      <q-toolbar class="bg-primary text-white">
+        <q-toolbar-title>
+          Earthkeeper 2.0
+        </q-toolbar-title>
+        
+        <q-space />
+        
+        <q-btn flat @click="showLogin = !showLogin">
+          {{ authStore.isAuthenticated ? authStore.currentUser : 'Login' }}
+        </q-btn>
+      </q-toolbar>
+    </q-header>
 
-    <!-- Map Container -->
-    <div class="col ek-map-container">
-      <div id="earthkeeper-map" style="width: 100%; height: 100%;">
-        <!-- Loading State -->
-        <div v-if="locationStore.isLoading" class="absolute-full bg-forest flex flex-center">
-          <div class="text-center">
-            <q-spinner-dots size="50px" color="gold" class="q-mb-md"/>
-            <div class="text-gold q-mb-xs">{{ locationStore.loadingMessage }}</div>
-            <div class="text-soft text-caption">
-              Loading {{ locationStore.locations.length.toLocaleString() }} locations...
-            </div>
+    <!-- Main Content -->
+    <q-page-container>
+      <q-page class="flex flex-center">
+        <div v-if="!authStore.isAuthenticated" class="text-center">
+          <h2>Welcome to Earthkeeper 2.0</h2>
+          <p>Please log in to access the application</p>
+          <q-btn color="primary" label="Go to Login" @click="$router.push('/login')" />
+        </div>
+        
+        <div v-else class="text-center q-pa-md">
+          <h2>Welcome back, {{ authStore.currentUser }}!</h2>
+          
+          <div class="q-mt-md">
+            <q-card class="q-pa-md">
+              <h4>Application Status</h4>
+              <p><strong>Locations loaded:</strong> {{ locationStore.locations.length.toLocaleString() }}</p>
+              <p><strong>Loading:</strong> {{ locationStore.isLoading ? 'Yes' : 'No' }}</p>
+              <p><strong>Tool:</strong> {{ authStore.currentTool }}</p>
+              
+              <div class="q-mt-md q-gutter-sm">
+                <q-btn color="primary" @click="loadData" :loading="locationStore.isLoading">
+                  Load Data
+                </q-btn>
+                <q-btn color="secondary" @click="authStore.logout">
+                  Logout
+                </q-btn>
+              </div>
+            </q-card>
           </div>
         </div>
-
-        <!-- Map Placeholder (until MapLibre integrated) -->
-        <div v-else-if="!mapStore.mapReady" class="absolute-full bg-forest flex flex-center">
-          <div class="text-center">
-            <q-avatar size="120px" class="q-mb-md">
-              <img src="/earthkeeper-circular.png" alt="Earthkeeper">
-            </q-avatar>
-            <div class="ek-logo text-h4 q-mb-md">
-              Earth<em>keeper</em> 2.0
-            </div>
-            <div class="text-soft q-mb-md">
-              Map integration coming soon...
-            </div>
-            <div class="text-gold text-body2">
-              {{ locationStore.locations.length.toLocaleString() }} locations loaded
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Map Overlays -->
-      <div class="absolute-top-right q-ma-md" v-if="authStore.isAuthenticated">
-        <!-- Legend -->
-        <div class="ek-stats">
-          <div class="text-caption text-soft text-uppercase q-mb-sm">Legend</div>
-          <div v-for="type in locationTypes" :key="type.key" class="row items-center q-mb-xs">
-            <div 
-              class="q-mr-sm rounded-borders" 
-              style="width: 12px; height: 12px"
-              :style="`background: ${type.color}`"
-            ></div>
-            <div class="text-body2">{{ type.label }}</div>
-          </div>
-          <div class="row items-center">
-            <div 
-              class="q-mr-sm rounded-borders" 
-              style="width: 12px; height: 12px; background: var(--gold); border: 2px solid rgba(255,255,255,0.5)"
-            ></div>
-            <div class="text-body2">Cleared</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Home Button -->
-      <q-btn 
-        fab
-        icon="home"
-        color="forest-m"
-        text-color="gold"
-        class="absolute"
-        style="top: 90px; left: 14px; z-index: 100"
-        @click="goHome"
-        size="sm"
-        v-if="authStore.isAuthenticated"
-      />
-
-      <!-- Locate Me Button -->
-      <q-btn 
-        flat
-        icon="my_location"
-        label="Find Me"
-        color="forest-m"
-        text-color="gold-l"
-        class="absolute"
-        style="bottom: 22px; left: 14px; z-index: 100"
-        @click="locateUser"
-        dense
-        v-if="authStore.isAuthenticated"
-      />
-    </div>
-
-    <!-- Loading Overlay -->
-    <q-inner-loading :showing="locationStore.isLoading">
-      <q-spinner-dots size="50px" color="gold" />
-      <div class="text-gold q-mt-md">{{ locationStore.loadingMessage }}</div>
-    </q-inner-loading>
-  </q-page>
+      </q-page>
+    </q-page-container>
+  </q-layout>
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, watch } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth-store'
 import { useLocationStore } from '../stores/location-store'
-import { useMapStore } from '../stores/map-store'
 
 export default defineComponent({
   name: 'IndexPage',
@@ -119,134 +65,35 @@ export default defineComponent({
     const router = useRouter()
     const authStore = useAuthStore()
     const locationStore = useLocationStore()
-    const mapStore = useMapStore()
+    const showLogin = ref(false)
 
-    // Location types with same colors as original
-    const locationTypes = [
-      { key: 'hospital', label: 'Hospital', color: '#E07050' },
-      { key: 'hospice', label: 'Hospice', color: '#3DBFA8' },
-      { key: 'prison', label: 'Prison', color: '#C4722A' },
-      { key: 'university', label: 'University', color: '#9B78C8' },
-      { key: 'school', label: 'School', color: '#5B9BD5' },
-      { key: 'gp', label: 'GP Surgery', color: '#4A9B6F' }
-    ]
-
-    const goHome = () => {
-      if (mapStore.map) {
-        mapStore.flyToUK()
-      }
-    }
-
-    const locateUser = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude: lat, longitude: lng } = position.coords
-            if (mapStore.map) {
-              mapStore.flyTo([lng, lat], 11)
-            }
-            
-            // Find nearest uncleared locations
-            const nearest = locationStore.findNearestUncleared(lat, lng, 5)
-            if (nearest.length > 0) {
-              const nearestLoc = nearest[0]
-              $q.notify({
-                message: `Nearest uncleared: ${nearestLoc.name}`,
-                caption: `${nearestLoc.distance.toFixed(1)}km away`,
-                color: 'positive',
-                icon: 'place'
-              })
-            }
-          },
-          (error) => {
-            $q.notify({
-              message: 'Could not get your location',
-              color: 'negative'
-            })
-          }
-        )
-      }
-    }
-
-    // Check authentication and redirect if needed
-    const checkAuth = () => {
-      // Check for existing session first
-      authStore.checkExistingSession()
-      
-      if (!authStore.isAuthenticated) {
-        router.push('/login')
-      }
-    }
-
-    onMounted(async () => {
+    const loadData = async () => {
       try {
-        // Check authentication first
-        checkAuth()
-        
-        if (authStore.isAuthenticated) {
-          // Initialize app data
-          await locationStore.initializeApp()
-          
-          $q.notify({
-            message: `Welcome back, ${authStore.currentUser}!`,
-            caption: `${locationStore.locations.length.toLocaleString()} locations loaded`,
-            color: 'positive',
-            icon: 'check_circle',
-            timeout: 3000
-          })
-        }
+        $q.notify({ message: 'Starting data load...', color: 'info' })
+        await locationStore.initializeApp()
+        $q.notify({ 
+          message: `Successfully loaded ${locationStore.locations.length.toLocaleString()} locations!`,
+          color: 'positive'
+        })
       } catch (error) {
-        console.error('Failed to initialize app:', error)
         $q.notify({
-          message: 'Failed to load data',
-          caption: error.message,
-          color: 'negative',
-          icon: 'error'
+          message: 'Failed to load data: ' + error.message,
+          color: 'negative'
         })
       }
-    })
+    }
 
-    // Watch for authentication changes
-    watch(() => authStore.isAuthenticated, (isAuth) => {
-      if (!isAuth) {
-        router.push('/login')
-      }
+    onMounted(() => {
+      // Check for existing session
+      authStore.checkExistingSession()
     })
 
     return {
       authStore,
       locationStore,
-      mapStore,
-      locationTypes,
-      goHome,
-      locateUser
+      showLogin,
+      loadData
     }
   }
 })
 </script>
-
-<style lang="scss" scoped>
-.bg-forest-m {
-  background: var(--forest-m);
-}
-
-.text-soft {
-  color: var(--soft);
-}
-
-.text-gold {
-  color: var(--gold);
-}
-
-.bg-forest {
-  background: var(--forest);
-}
-
-.absolute-full {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-</style>
