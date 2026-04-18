@@ -1,7 +1,7 @@
 <template>
   <div id="earthkeeper-root">
     <!-- Exact copy of original index.html structure -->
-    <div id="login-screen">
+    <div id="login-screen" style="display: flex">
       <div class="login-bg-logo"><img src="/earthkeeper-circular.svg" alt=""></div>
       <div class="login-bg-glow"></div>
       <div class="login-box">
@@ -9,22 +9,41 @@
         <div class="login-logo">Earth<em>keeper</em></div>
         <div class="login-sub">UK Energy Clearing Tracker</div>
         <div id="login-form-wrap">
-          <div class="login-field"><label for="login-name">Your full name</label><input type="text" id="login-name" name="username" placeholder="e.g. Anthony Gorman" autocomplete="username"></div>
-          <div class="login-field"><label for="login-pw">Password</label><input type="password" id="login-pw" name="password" placeholder="••••••" autocomplete="current-password" @keydown="handleLoginKeydown"></div>
-          <div class="login-field"><label class="login-label">Default clearing tool</label><select id="login-tool" class="login-select"><option value="" disabled selected hidden>Select your tool...</option><option value="MS">Magical Structures (MS)</option>
-<option value="MF">Multifrequency (MF)</option>
-<option value="O">Omega (O)</option>
-<option value="J">Jewel (J)</option>
-<option value="MG">Merlin's Grace (MG)</option>
-<option value="AP">Universal AP (AP)</option>
-<option value="MI">Manifesting Intention (MI)</option>
-<option value="MJ">Magical Jewel (MJ)</option>
-<option value="DM">Divine Magic (DM)</option></select></div><div class="login-ew-row"><label class="login-ew-label"><input type="checkbox" id="login-ew"> I have Earthworks tools (EW1–5)</label></div><button type="button" class="login-btn" @click="doLogin">Enter</button>
+          <div class="login-field">
+            <label for="login-name">Your full name</label>
+            <input type="text" id="login-name" name="username" placeholder="e.g. Anthony Gorman" autocomplete="username">
+          </div>
+          <div class="login-field">
+            <label for="login-pw">Password</label>
+            <input type="password" id="login-pw" name="password" placeholder="••••••" autocomplete="current-password" @keydown="handleLoginKeydown">
+          </div>
+          <div class="login-field">
+            <label class="login-label">Default clearing tool</label>
+            <select id="login-tool" class="login-select">
+              <option value="" disabled selected hidden>Select your tool...</option>
+              <option value="MS">Magical Structures (MS)</option>
+              <option value="MF">Multifrequency (MF)</option>
+              <option value="O">Omega (O)</option>
+              <option value="J">Jewel (J)</option>
+              <option value="MG">Merlin's Grace (MG)</option>
+              <option value="AP">Universal AP (AP)</option>
+              <option value="MI">Manifesting Intention (MI)</option>
+              <option value="MJ">Magical Jewel (MJ)</option>
+              <option value="DM">Divine Magic (DM)</option>
+            </select>
+          </div>
+          <div class="login-ew-row">
+            <label class="login-ew-label">
+              <input type="checkbox" id="login-ew"> I have Earthworks tools (EW1–5)
+            </label>
+          </div>
+          <button type="button" class="login-btn" @click="doLogin">Enter</button>
         </div>
         <div class="login-err" id="login-err"></div>
         <a href="instructions.html" class="login-instructions">New here? Read the instructions</a>
       </div>
     </div>
+    
     <div id="app" style="display: none">
       <header>
         <div class="header-brand">
@@ -40,7 +59,15 @@
           <div class="huser"><strong id="h-username"></strong><button @click="logout">Sign out</button></div>
         </div>
       </header>
-      <div id="mobile-stats" class="mobile-stats-bar"><span id="ms-total">—</span><span id="ms-label-total"> locations</span><span class="ms-sep">·</span><span id="ms-cleared">0</span><span id="ms-label-cleared"> cleared</span><span class="ms-sep">·</span><span id="ms-pct">0%</span><span> done</span></div>
+      
+      <div id="mobile-stats" class="mobile-stats-bar">
+        <span id="ms-total">—</span><span id="ms-label-total"> locations</span>
+        <span class="ms-sep">·</span>
+        <span id="ms-cleared">0</span><span id="ms-label-cleared"> cleared</span>
+        <span class="ms-sep">·</span>
+        <span id="ms-pct">0%</span><span> done</span>
+      </div>
+      
       <div class="body">
         <div class="sidebar" id="sidebar">
           <div class="tabs">
@@ -48,6 +75,7 @@
             <button class="tab" id="tab-btn-groups" @click="switchTab('groups')">Groups</button>
             <button class="tab" id="tab-btn-log" @click="switchTab('log')">Log</button>
           </div>
+          
           <div class="panel on" id="tab-locs">
             <div class="frow">
               <div class="frow-label">Places</div>
@@ -60,6 +88,7 @@
                 <div class="chip gp" @click="togglePlace('gp')"><span class="chip-dot" style="background:var(--green)"></span>GPs</div>
               </div>
             </div>
+            
             <div class="frow">
               <div class="frow-label">Show</div>
               <div class="chips" id="show-chips">
@@ -67,6 +96,7 @@
                 <div class="chip show-cleared" id="chip-cleared" @click="setShow('cleared')"><span class="chip-dot" style="background:var(--gold)"></span>All Cleared</div>
               </div>
             </div>
+            
             <div class="rsel">
               <select id="region-select" @change="loadRegion($event.target.value)">
                 <option value="all" selected>— All regions —</option>
@@ -84,9 +114,14 @@
                 <option value="northernireland">Northern Ireland</option>
               </select>
             </div>
-            <div class="srow"><input class="sinput" type="text" placeholder="Search by name or address..." id="search" @input="renderList" autocomplete="off"></div>
+            
+            <div class="srow">
+              <input class="sinput" type="text" placeholder="Search by name or address..." id="search" @input="renderList" autocomplete="off">
+            </div>
+            
             <div class="llist" id="llist"></div>
           </div>
+          
           <div class="panel" id="tab-groups">
             <div class="gtype-row">
               <button class="gtype-btn school on" id="gtype-school" @click="toggleGroupType('school')"><span class="chip-dot" style="background:var(--blue);display:inline-block;margin-right:4px"></span>Schools</button>
@@ -95,6 +130,7 @@
             <div class="srow"><input class="sinput" type="text" placeholder="Search districts..." id="group-search" @input="renderDistrictList" autocomplete="off"></div>
             <div class="district-list" id="district-list"><div class="empty">Loading districts...</div></div>
           </div>
+          
           <div class="panel" id="tab-log">
             <div class="log-filter">
               <label>From</label><input type="date" class="log-date-input" id="log-from" @change="renderLog">
@@ -105,6 +141,7 @@
             <div id="log-list" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0"></div>
           </div>
         </div>
+        
         <div class="mwrap">
           <div id="map"></div>
           <button id="home-btn" class="map-home-btn" @click="goHome" title="Home">
@@ -113,6 +150,7 @@
               <path d="M5 10v9a1 1 0 001 1h4v-4h4v4h4a1 1 0 001-1v-9"/>
             </svg>
           </button>
+          
           <div class="mload" id="mload">
             <div style="width:90px;height:90px;border-radius:50%;overflow:hidden;margin-bottom:8px">
               <img src="/earthkeeper-circular.svg" alt="Earthkeeper" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block" onerror="this.style.display='none'">
@@ -120,7 +158,9 @@
             <div class="dots"><span></span><span></span><span></span></div>
             <div class="msub" id="mload-msg">Loading...</div>
           </div>
+          
           <button class="tog" id="tog" @click="toggleSidebar">‹</button>
+          
           <div class="map-overlays">
             <div class="progress" id="map-progress">
               <div class="prog-title">Progress</div>
@@ -131,6 +171,7 @@
               <div class="prog-row" id="pg-row-s"><div class="prog-label">Schools</div><div class="prog-track"><div class="prog-fill" id="pg-s" style="background:var(--blue);width:0%"></div></div><div class="prog-count" id="pg-st">-</div></div>
               <div class="prog-row" id="pg-row-gp"><div class="prog-label">GPs</div><div class="prog-track"><div class="prog-fill" id="pg-gp" style="background:var(--green);width:0%"></div></div><div class="prog-count" id="pg-gpt">-</div></div>
             </div>
+            
             <div class="legend" id="map-legend">
               <div class="leg-title">Legend</div>
               <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>Hospital</div>
@@ -142,6 +183,7 @@
               <div class="leg-item"><div class="leg-dot" style="background:var(--gold);border:2px solid rgba(255,255,255,.5)"></div>Cleared</div>
             </div>
           </div>
+          
           <button class="locate-btn" id="locate-btn" @click="locateMe"><span>📍</span>Find Me</button>
         </div>
       </div>
@@ -150,18 +192,116 @@
 </template>
 
 <script>
-// Import original earthkeeper JavaScript with minimal Vue wrapper
 export default {
   name: 'IndexPage',
   
-  mounted() {
-    this.initEarthkeeper()
+  data() {
+    return {
+      // Earthkeeper state
+      currentUser: null,
+      currentTool: 'MG',
+      locations: [],
+      progress: {},
+      placesFilter: {
+        hospital: true,
+        school: false,
+        university: true,
+        hospice: true,
+        prison: true,
+        gp: false
+      },
+      showFilter: 'all',
+      map: null,
+      mapReady: false
+    }
+  },
+  
+  async mounted() {
+    console.log('IndexPage mounted')
+    await this.initEarthkeeper()
   },
   
   methods: {
-    initEarthkeeper() {
-      // Initialize original Earthkeeper JavaScript
-      this.initializeOriginalCode()
+    async initEarthkeeper() {
+      console.log('Initializing Earthkeeper...')
+      
+      // Check for saved user
+      const savedUser = localStorage.getItem('ek_user')
+      if (savedUser) {
+        this.currentUser = savedUser
+        this.currentTool = localStorage.getItem('ek_tool') || 'MG'
+        
+        document.getElementById('login-screen').style.display = 'none'
+        document.getElementById('app').style.display = 'flex'
+        document.getElementById('h-username').textContent = savedUser
+        
+        this.loadAppData()
+      }
+      
+      this.setupMapLibre()
+    },
+    
+    async setupMapLibre() {
+      // Load MapLibre if not already loaded
+      if (!window.maplibregl) {
+        return new Promise((resolve) => {
+          const script = document.createElement('script')
+          script.src = 'https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js'
+          script.onload = () => {
+            console.log('MapLibre GL JS loaded')
+            this.initMap()
+            resolve()
+          }
+          document.head.appendChild(script)
+        })
+      } else {
+        this.initMap()
+      }
+    },
+    
+    initMap() {
+      if (!document.getElementById('map')) {
+        console.warn('Map container not ready')
+        return
+      }
+      
+      try {
+        this.map = new window.maplibregl.Map({
+          container: 'map',
+          style: {
+            version: 8,
+            sources: {
+              carto: {
+                type: 'raster',
+                tiles: [
+                  'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png',
+                  'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png', 
+                  'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png'
+                ],
+                tileSize: 256,
+                attribution: '(c) OpenStreetMap contributors (c) CARTO'
+              }
+            },
+            layers: [
+              { id: 'carto-tiles', type: 'raster', source: 'carto' }
+            ]
+          },
+          center: [-1.5, 53.5],
+          zoom: 5.5,
+          attributionControl: false
+        })
+        
+        this.map.addControl(new window.maplibregl.NavigationControl({ showCompass: false }), 'top-left')
+        
+        this.map.on('load', () => {
+          this.mapReady = true
+          console.log('Map ready!')
+        })
+        
+        console.log('Map initialized successfully')
+      } catch (error) {
+        console.error('Failed to initialize map:', error)
+      }
     },
     
     handleLoginKeydown(event) {
@@ -170,459 +310,338 @@ export default {
       }
     },
     
-    doLogin() {
-      window.doLogin()
+    async doLogin() {
+      console.log('Login attempt...')
+      
+      const name = document.getElementById('login-name').value.trim()
+      const pw = document.getElementById('login-pw').value
+      const err = document.getElementById('login-err')
+      
+      if (!name) {
+        err.textContent = 'Please enter your name'
+        return
+      }
+      if (!pw) {
+        err.textContent = 'Please enter the password'
+        return
+      }
+      
+      const tool = document.getElementById('login-tool').value
+      if (!tool) {
+        err.textContent = 'Please select your default clearing tool'
+        return
+      }
+      
+      err.textContent = 'Checking...'
+      
+      try {
+        const hash = await this.sha256(pw)
+        console.log('Password hash:', hash)
+        
+        // Original Earthkeeper password hash
+        const PASSWORD_HASH = '74e6fbb572af72246abf610d8e268ae53e6599972c571117503dc4537b982b69'
+        
+        if (hash !== PASSWORD_HASH) {
+          err.textContent = 'Incorrect password'
+          document.getElementById('login-pw').value = ''
+          return
+        }
+        
+        // Success!
+        this.currentUser = name
+        this.currentTool = tool
+        
+        localStorage.setItem('ek_user', name)
+        localStorage.setItem('ek_tool', tool)
+        
+        document.getElementById('login-screen').style.display = 'none'
+        document.getElementById('app').style.display = 'flex'
+        document.getElementById('h-username').textContent = name
+        
+        err.textContent = ''
+        console.log('Login successful!')
+        
+        await this.loadAppData()
+      } catch (error) {
+        console.error('Login error:', error)
+        err.textContent = 'Login failed'
+      }
+    },
+    
+    async sha256(str) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str))
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('')
     },
     
     logout() {
-      window.logout()
+      localStorage.removeItem('ek_user')
+      localStorage.removeItem('ek_tool')
+      this.currentUser = null
+      
+      document.getElementById('login-name').value = ''
+      document.getElementById('login-pw').value = ''
+      document.getElementById('login-screen').style.display = 'flex'
+      document.getElementById('app').style.display = 'none'
+    },
+    
+    async loadAppData() {
+      console.log('Loading app data...')
+      this.setMsg('Loading data...')
+      document.getElementById('mload').style.display = 'flex'
+      
+      try {
+        await this.loadProgress()
+        await this.loadAllRegions()
+        this.hideLoader()
+        this.updateStats()
+        this.renderList()
+        console.log('Data loaded successfully')
+      } catch (error) {
+        console.error('Failed to load data:', error)
+        this.setMsg('Error loading data')
+        setTimeout(() => this.hideLoader(), 3000)
+      }
+    },
+    
+    async loadProgress() {
+      try {
+        const res = await fetch('https://raw.githubusercontent.com/Londrovski/earthkeeper/main/data/progress.json?t=' + Date.now())
+        if (res.ok) {
+          this.progress = await res.json()
+          console.log('Progress loaded:', Object.keys(this.progress).length, 'clearings')
+        }
+      } catch (e) {
+        console.warn('Could not load progress data:', e)
+        this.progress = {}
+      }
+    },
+    
+    async loadAllRegions() {
+      this.setMsg('Loading all regions...')
+      
+      const regions = ['london', 'southeast', 'southwest', 'eastengland', 'eastmidlands', 'westmidlands', 'yorkshire', 'northwest', 'northeast', 'wales', 'scotland', 'northernireland']
+      const batchSize = 3
+      const results = []
+      
+      for (let i = 0; i < regions.length; i += batchSize) {
+        const batch = regions.slice(i, i + batchSize)
+        const batchResults = await Promise.all(batch.map(region => this.fetchRegionData(region)))
+        results.push(...batchResults)
+      }
+      
+      this.locations = results.flat()
+      console.log('Loaded', this.locations.length, 'locations')
+    },
+    
+    async fetchRegionData(region) {
+      const dataTypes = ['hospitals', 'hospices', 'universities', 'prisons']
+      const results = []
+      
+      for (const type of dataTypes) {
+        try {
+          const response = await fetch(`https://raw.githubusercontent.com/Londrovski/earthkeeper/main/data/${type}-${region}.json`)
+          if (response.ok) {
+            const data = await response.json()
+            const typeName = type.slice(0, -1) // Remove 's' from plural
+            results.push(...data.map(item => ({ ...item, type: typeName })))
+          }
+        } catch (error) {
+          console.warn(`Could not load ${type} for ${region}:`, error)
+        }
+      }
+      
+      return results
+    },
+    
+    setMsg(msg) {
+      const el = document.getElementById('mload-msg')
+      if (el) el.textContent = msg
+    },
+    
+    hideLoader() {
+      const el = document.getElementById('mload')
+      if (el) el.style.display = 'none'
+    },
+    
+    updateStats() {
+      const visibleLocs = this.locations.filter(l => this.placesFilter[l.type])
+      const total = visibleLocs.length
+      const cleared = visibleLocs.filter(l => this.progress[l.id]).length
+      const pct = total ? Math.round(cleared / total * 100) : 0
+      
+      const totalEl = document.getElementById('s-total')
+      const clearedEl = document.getElementById('s-cleared')
+      const pctEl = document.getElementById('s-pct')
+      
+      if (totalEl) totalEl.textContent = total.toLocaleString()
+      if (clearedEl) clearedEl.textContent = cleared
+      if (pctEl) pctEl.textContent = pct + '%'
+      
+      // Update mobile stats
+      const mTotalEl = document.getElementById('ms-total')
+      const mClearedEl = document.getElementById('ms-cleared')
+      const mPctEl = document.getElementById('ms-pct')
+      
+      if (mTotalEl) mTotalEl.textContent = total.toLocaleString()
+      if (mClearedEl) mClearedEl.textContent = cleared
+      if (mPctEl) mPctEl.textContent = pct + '%'
+    },
+    
+    renderList() {
+      const el = document.getElementById('llist')
+      const searchEl = document.getElementById('search')
+      
+      if (!el || !searchEl) return
+      
+      const q = searchEl.value.toLowerCase().trim()
+      
+      if (!q) {
+        el.innerHTML = ''
+        return
+      }
+      
+      const visible = this.locations.filter(l => {
+        if (!this.placesFilter[l.type]) return false
+        if (this.showFilter === 'cleared' && !this.progress[l.id]) return false
+        return l.name.toLowerCase().includes(q) || 
+               (l.address && l.address.toLowerCase().includes(q)) ||
+               (l.postcode && l.postcode.toLowerCase().includes(q))
+      })
+      
+      if (!visible.length) {
+        el.innerHTML = `<div class="empty">No matches for "${q}"</div>`
+        return
+      }
+      
+      el.innerHTML = visible.slice(0, 50).map(l => {
+        const p = this.progress[l.id]
+        const typeColors = {
+          hospital: '#E07050',
+          school: '#5B9BD5',
+          hospice: '#3DBFA8',
+          prison: '#C4722A',
+          university: '#9B78C8',
+          gp: '#4A9B6F'
+        }
+        const dotBg = p ? '#C9A84C' : (typeColors[l.type] || '#9B78C8')
+        const dotBorder = p ? 'border:2px solid #C9A84C' : 'border:2px solid transparent'
+        const badge = p ? `<div class="lbadge" style="color:#C9A84C;border-color:#C9A84C66;background:#C9A84C14">${p.tool || 'CLR'}</div>` : ''
+        
+        return `<div class="litem ${p ? 'done' : ''}" onclick="selectLoc('${l.id}')">
+                  <div class="ldot" style="background:${dotBg};${dotBorder}"></div>
+                  <div class="linfo">
+                    <div class="lname">${l.name}</div>
+                    <div class="lmeta">${l.type} - ${l.address || l.postcode || ''}</div>
+                  </div>
+                  ${badge}
+                </div>`
+      }).join('')
     },
     
     switchTab(name) {
       const btn = document.getElementById(`tab-btn-${name}`)
-      window.switchTab(name, btn)
+      if (!btn) return
+      
+      document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'))
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'))
+      btn.classList.add('on')
+      
+      const panel = document.getElementById(`tab-${name}`)
+      if (panel) panel.classList.add('on')
     },
     
     togglePlace(type) {
+      this.placesFilter[type] = !this.placesFilter[type]
       const el = document.querySelector(`.chip.${type}`)
-      window.togglePlace(type, el)
+      if (el) el.classList.toggle('on', this.placesFilter[type])
+      this.updateStats()
+      this.renderList()
     },
     
     setShow(mode) {
+      this.showFilter = mode
+      document.querySelectorAll('.chip.show-all, .chip.show-cleared').forEach(c => c.classList.remove('on'))
       const el = document.getElementById(`chip-${mode}`)
-      window.setShow(mode, el)
+      if (el) el.classList.add('on')
+      this.updateStats()
+      this.renderList()
     },
     
     loadRegion(value) {
-      window.loadRegion(value)
-    },
-    
-    renderList() {
-      window.renderList()
+      console.log('Load region:', value)
+      if (value === 'all') {
+        this.loadAllRegions().then(() => {
+          this.updateStats()
+          this.renderList()
+        })
+      }
     },
     
     toggleGroupType(type) {
-      const el = document.getElementById(`gtype-${type}`)
-      window.toggleGroupType(type, el)
+      console.log('Toggle group type:', type)
     },
     
     renderDistrictList() {
-      window.renderDistrictList()
+      console.log('Render district list')
     },
     
     renderLog() {
-      window.renderLog()
+      console.log('Render log')
     },
     
     clearLogFilter() {
-      window.clearLogFilter()
+      const fromEl = document.getElementById('log-from')
+      const toEl = document.getElementById('log-to')
+      if (fromEl) fromEl.value = ''
+      if (toEl) toEl.value = ''
+      this.renderLog()
     },
     
     goHome() {
-      window.goHome()
+      if (this.map) {
+        this.map.flyTo({ center: [-1.5, 53.5], zoom: 5.5 })
+      }
     },
     
     toggleSidebar() {
-      window.toggleSidebar()
+      const sidebar = document.getElementById('sidebar')
+      const tog = document.getElementById('tog')
+      
+      if (!sidebar || !tog) return
+      
+      const isCollapsed = sidebar.classList.contains('collapsed')
+      sidebar.classList.toggle('collapsed', !isCollapsed)
+      tog.textContent = isCollapsed ? '‹' : '›'
+      
+      setTimeout(() => {
+        if (this.map) this.map.resize()
+      }, 320)
     },
     
     locateMe() {
-      window.locateMe()
-    },
-    
-    initializeOriginalCode() {
-      // Embed the EXACT original JavaScript here
-      const script = document.createElement('script')
-      script.textContent = `
-        // Original Earthkeeper JavaScript - EXACT COPY
-        const GITHUB_TOKEN='ghp_KcWJhRHBiDNttiIcY5N'+'XE23u4hbGqL3coy1n'
-        const PASSWORD_HASH='74e6fbb572af72246abf610d8e268ae53e6599972c571117503dc4537b982b69'
-        const REPO_OWNER='Londrovski',REPO_NAME='earthkeeper',DATA_BRANCH='main'
-        const API_BASE='https://api.github.com/repos/'+REPO_OWNER+'/'+REPO_NAME+'/contents/data'
-        const RAW_BASE='https://raw.githubusercontent.com/'+REPO_OWNER+'/'+REPO_NAME+'/main/data'
-        
-        const ALL_REGIONS=['london','southeast','southwest','eastengland','eastmidlands','westmidlands','yorkshire','northwest','northeast','wales','scotland','northernireland']
-        const TYPE_COLORS={hospital:'#E07050',school:'#5B9BD5',hospice:'#3DBFA8',prison:'#C4722A',university:'#9B78C8',gp:'#4A9B6F'}
-        const TOOL_COLORS={omega:'#9B5ED4',jewel:'#E07050',mg:'#4A85C9'}
-        const GOLD='#C9A84C'
-        function typeColor(t){return TYPE_COLORS[t]||'#9B78C8'}
-        function toolColor(t){return TOOL_COLORS[t]||GOLD}
-        const TOOLS=['MS','MF','O','J','MG','AP','MI','MJ','DM']
-        const TOOL_NAMES={MS:'MS',MF:'MF',O:'O',J:'J',MG:'MG',AP:'AP',MI:'MI',MJ:'MJ',DM:'DM'}
-        const TOOL_NAMES_FULL={MS:'Magical Structures (MS)',MF:'Multifrequency (MF)',O:'Omega (O)',J:'Jewel (J)',MG:"Merlin's Grace (MG)",AP:'Universal AP (AP)',MI:'Manifesting Intention (MI)',MJ:'Magical Jewel (MJ)',DM:'Divine Magic (DM)'}
-        
-        let locations=[],progress={},progressSha=null,groupProgress={},groupProgressSha=null,selectedId=null,map,mapReady=false
-        let placesFilter={hospital:true,school:false,university:true,hospice:true,prison:true,gp:false}
-        let showFilter='all',currentTool='MG',currentUser=null
-        const GH_HEADERS={Authorization:'token '+GITHUB_TOKEN,Accept:'application/vnd.github.v3+json'}
-        
-        // Import MapLibre
-        if (!window.maplibregl) {
-          const script = document.createElement('script')
-          script.src = 'https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js'
-          script.onload = () => {
-            initMap()
+      if (!navigator.geolocation) {
+        alert('Geolocation not supported')
+        return
+      }
+      
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          const { latitude: lat, longitude: lng } = pos.coords
+          if (this.map) {
+            this.map.flyTo({ center: [lng, lat], zoom: 12 })
           }
-          document.head.appendChild(script)
-          
-          const link = document.createElement('link')
-          link.rel = 'stylesheet'
-          link.href = 'https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css'
-          document.head.appendChild(link)
-        } else {
-          initMap()
+        },
+        err => {
+          alert('Could not get your location')
         }
-        
-        function initMap() {
-          map = new maplibregl.Map({
-            container: 'map',
-            style: {
-              version: 8,
-              sources: {
-                carto: {
-                  type: 'raster',
-                  tiles: [
-                    'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png',
-                    'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png', 
-                    'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png'
-                  ],
-                  tileSize: 256,
-                  attribution: '(c) OpenStreetMap contributors (c) CARTO'
-                }
-              },
-              layers: [
-                { id: 'carto-tiles', type: 'raster', source: 'carto' }
-              ]
-            },
-            center: [-1.5, 53.5],
-            zoom: 5.5,
-            attributionControl: false
-          })
-          
-          map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left')
-          
-          map.on('load', () => {
-            mapReady = true
-            console.log('MapLibre map loaded successfully!')
-            loadAppData()
-          })
-        }
-        
-        async function sha256(str) {
-          const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str))
-          return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('')
-        }
-        
-        async function doLogin() {
-          const name = document.getElementById('login-name').value.trim()
-          const pw = document.getElementById('login-pw').value
-          const err = document.getElementById('login-err')
-          
-          if (!name) {
-            err.textContent = 'Please enter your name'
-            return
-          }
-          if (!pw) {
-            err.textContent = 'Please enter the password'
-            return
-          }
-          
-          const tool = document.getElementById('login-tool').value
-          if (!tool) {
-            err.textContent = 'Please select your default clearing tool'
-            return
-          }
-          
-          err.textContent = 'Checking...'
-          const hash = await sha256(pw)
-          
-          if (hash !== PASSWORD_HASH) {
-            err.textContent = 'Incorrect password'
-            document.getElementById('login-pw').value = ''
-            return
-          }
-          
-          currentUser = name
-          currentTool = tool
-          
-          localStorage.setItem('ek_user', name)
-          localStorage.setItem('ek_tool', tool)
-          
-          document.getElementById('login-screen').style.display = 'none'
-          document.getElementById('app').style.display = 'flex'
-          document.getElementById('h-username').textContent = name
-          
-          err.textContent = ''
-          loadAppData()
-        }
-        
-        function logout() {
-          localStorage.removeItem('ek_user')
-          localStorage.removeItem('ek_tool')
-          currentUser = null
-          document.getElementById('login-name').value = ''
-          document.getElementById('login-pw').value = ''
-          document.getElementById('login-screen').style.display = 'flex'
-          document.getElementById('app').style.display = 'none'
-        }
-        
-        async function loadAppData() {
-          setMsg('Loading data...')
-          document.getElementById('mload').style.display = 'flex'
-          
-          try {
-            await loadProgress()
-            await loadAllRegions()
-            hideLoader()
-            updateStats()
-            renderList()
-          } catch (error) {
-            console.error('Failed to load data:', error)
-            setMsg('Error loading data')
-            setTimeout(hideLoader, 3000)
-          }
-        }
-        
-        async function loadProgress() {
-          try {
-            const res = await fetch(RAW_BASE + '/progress.json?t=' + Date.now())
-            if (res.ok) {
-              progress = await res.json()
-            }
-          } catch (e) {
-            console.warn('Could not load progress data:', e)
-            progress = {}
-          }
-        }
-        
-        async function loadAllRegions() {
-          setMsg('Loading all regions...')
-          
-          const batchSize = 3
-          const results = []
-          
-          for (let i = 0; i < ALL_REGIONS.length; i += batchSize) {
-            const batch = ALL_REGIONS.slice(i, i + batchSize)
-            const batchResults = await Promise.all(batch.map(region => fetchRegionData(region)))
-            results.push(...batchResults)
-          }
-          
-          locations = results.flat()
-          console.log('Loaded', locations.length, 'locations')
-        }
-        
-        async function fetchRegionData(region) {
-          const dataTypes = ['hospitals', 'hospices', 'universities', 'prisons']
-          const results = []
-          
-          for (const type of dataTypes) {
-            try {
-              const response = await fetch(RAW_BASE + '/' + type + '-' + region + '.json')
-              if (response.ok) {
-                const data = await response.json()
-                const typeName = type.slice(0, -1) // Remove 's' from plural
-                results.push(...data.map(item => ({ ...item, type: typeName })))
-              }
-            } catch (error) {
-              console.warn('Could not load', type, 'for', region, ':', error)
-            }
-          }
-          
-          return results
-        }
-        
-        function setMsg(msg) {
-          document.getElementById('mload-msg').textContent = msg
-        }
-        
-        function hideLoader() {
-          document.getElementById('mload').style.display = 'none'
-        }
-        
-        function updateStats() {
-          const visibleLocs = locations.filter(l => placesFilter[l.type])
-          const total = visibleLocs.length
-          const cleared = visibleLocs.filter(l => progress[l.id]).length
-          const pct = total ? Math.round(cleared / total * 100) : 0
-          
-          document.getElementById('s-total').textContent = total.toLocaleString()
-          document.getElementById('s-cleared').textContent = cleared
-          document.getElementById('s-pct').textContent = pct + '%'
-          
-          // Update mobile stats
-          document.getElementById('ms-total').textContent = total.toLocaleString()
-          document.getElementById('ms-cleared').textContent = cleared
-          document.getElementById('ms-pct').textContent = pct + '%'
-        }
-        
-        function renderList() {
-          const el = document.getElementById('llist')
-          const q = document.getElementById('search').value.toLowerCase().trim()
-          
-          if (!q) {
-            el.innerHTML = ''
-            return
-          }
-          
-          const visible = locations.filter(l => {
-            if (!placesFilter[l.type]) return false
-            if (showFilter === 'cleared' && !progress[l.id]) return false
-            return l.name.toLowerCase().includes(q) || 
-                   (l.address && l.address.toLowerCase().includes(q)) ||
-                   (l.postcode && l.postcode.toLowerCase().includes(q))
-          })
-          
-          if (!visible.length) {
-            el.innerHTML = '<div class="empty">No matches for "' + q + '"</div>'
-            return
-          }
-          
-          el.innerHTML = visible.slice(0, 50).map(l => {
-            const p = progress[l.id]
-            const dotBg = p ? GOLD : typeColor(l.type)
-            const dotBorder = p ? 'border:2px solid ' + toolColor(p.tool) : 'border:2px solid transparent'
-            const badge = p ? '<div class="lbadge" style="color:' + toolColor(p.tool) + ';border-color:' + toolColor(p.tool) + '66;background:' + toolColor(p.tool) + '14">' + (TOOL_NAMES[p.tool] || p.tool) + '</div>' : ''
-            
-            return '<div class="litem ' + (p ? 'done' : '') + '" onclick="selectLoc(\'' + l.id + '\')">' +
-                   '<div class="ldot" style="background:' + dotBg + ';' + dotBorder + '"></div>' +
-                   '<div class="linfo">' +
-                   '<div class="lname">' + l.name + '</div>' +
-                   '<div class="lmeta">' + l.type + ' - ' + (l.address || l.postcode || '') + '</div>' +
-                   '</div>' + badge + '</div>'
-          }).join('')
-        }
-        
-        function selectLoc(id) {
-          selectedId = id
-          const loc = locations.find(l => l.id === id)
-          if (loc && map && loc.lat && loc.lng) {
-            map.flyTo({ center: [loc.lng, loc.lat], zoom: 12 })
-          }
-        }
-        
-        function togglePlace(type, el) {
-          placesFilter[type] = !placesFilter[type]
-          el.classList.toggle('on', placesFilter[type])
-          updateStats()
-          renderList()
-        }
-        
-        function setShow(mode, el) {
-          showFilter = mode
-          document.querySelectorAll('.chip.show-all, .chip.show-cleared').forEach(c => c.classList.remove('on'))
-          el.classList.add('on')
-          updateStats()
-          renderList()
-        }
-        
-        function loadRegion(value) {
-          console.log('Load region:', value)
-          if (value === 'all') {
-            loadAllRegions().then(() => {
-              updateStats()
-              renderList()
-            })
-          }
-          // Add specific region loading logic here
-        }
-        
-        function switchTab(name, btn) {
-          document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'))
-          document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'))
-          btn.classList.add('on')
-          document.getElementById('tab-' + name).classList.add('on')
-        }
-        
-        function toggleGroupType(type, el) {
-          console.log('Toggle group type:', type)
-          // Add group type logic here
-        }
-        
-        function renderDistrictList() {
-          console.log('Render district list')
-          // Add district list logic here
-        }
-        
-        function renderLog() {
-          console.log('Render log')
-          // Add log rendering logic here
-        }
-        
-        function clearLogFilter() {
-          document.getElementById('log-from').value = ''
-          document.getElementById('log-to').value = ''
-          renderLog()
-        }
-        
-        function goHome() {
-          if (map) {
-            map.flyTo({ center: [-1.5, 53.5], zoom: 5.5 })
-          }
-        }
-        
-        function toggleSidebar() {
-          const sidebar = document.getElementById('sidebar')
-          const tog = document.getElementById('tog')
-          const isCollapsed = sidebar.classList.contains('collapsed')
-          
-          sidebar.classList.toggle('collapsed', !isCollapsed)
-          tog.textContent = isCollapsed ? '‹' : '›'
-          
-          setTimeout(() => {
-            if (map) map.resize()
-          }, 320)
-        }
-        
-        function locateMe() {
-          if (!navigator.geolocation) {
-            alert('Geolocation not supported')
-            return
-          }
-          
-          navigator.geolocation.getCurrentPosition(
-            pos => {
-              const { latitude: lat, longitude: lng } = pos.coords
-              if (map) {
-                map.flyTo({ center: [lng, lat], zoom: 12 })
-              }
-            },
-            err => {
-              alert('Could not get your location')
-            }
-          )
-        }
-        
-        // Auto-login if user exists
-        const savedUser = localStorage.getItem('ek_user')
-        if (savedUser) {
-          currentUser = savedUser
-          currentTool = localStorage.getItem('ek_tool') || 'MG'
-          document.getElementById('login-screen').style.display = 'none'
-          document.getElementById('app').style.display = 'flex'
-          document.getElementById('h-username').textContent = savedUser
-          loadAppData()
-        }
-        
-        // Make functions global for Vue to access
-        window.doLogin = doLogin
-        window.logout = logout
-        window.switchTab = switchTab
-        window.togglePlace = togglePlace
-        window.setShow = setShow
-        window.loadRegion = loadRegion
-        window.renderList = renderList
-        window.toggleGroupType = toggleGroupType
-        window.renderDistrictList = renderDistrictList
-        window.renderLog = renderLog
-        window.clearLogFilter = clearLogFilter
-        window.goHome = goHome
-        window.toggleSidebar = toggleSidebar
-        window.locateMe = locateMe
-        window.selectLoc = selectLoc
-      `
-      document.head.appendChild(script)
+      )
     }
   }
+}
+
+// Global functions for click handlers in HTML
+window.selectLoc = function(id) {
+  console.log('Selected location:', id)
 }
 </script>
 
